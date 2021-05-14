@@ -40,6 +40,10 @@
   const R_len_t N = nrows(S);                                                  \
   const R_len_t K = ncols(S);
 
+#define UNPACK_REAL(S, R)                                                      \
+  CHECK_ARG_IS_REAL_VECTOR(S);                                                 \
+  double R = REAL(S)[0];
+
 static void kdpee_hoarePartition(const double *oneRow, int *keys, int minindex,
                                  int maxindex, int l0, int r0, double fulcrum,
                                  int *l, int *r) {
@@ -196,6 +200,7 @@ static double kdpee(const double **dimrefs, const int n, const int d,
 SEXP do_kdpee(SEXP sX, SEXP sZ) {
   /* Unpack arguments */
   UNPACK_REAL_MATRIX(sX, X, n, d);
+  UNPACK_REAL(sZ, z);
 
   /* Allocate work memory */
   double *mins = Calloc(n, double);
@@ -217,7 +222,7 @@ SEXP do_kdpee(SEXP sX, SEXP sZ) {
     }
   }
 
-  double entropy = kdpee(XX, n, d, mins, maxs, 1.96, keys);
+  double entropy = kdpee(XX, n, d, mins, maxs, z, keys);
 
   /* Free work memory */
   Free(XX);
