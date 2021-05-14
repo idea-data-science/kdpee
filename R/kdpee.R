@@ -19,4 +19,3 @@
 kdpee <- function(X, z=1.96) {
   .Call(do_kdpee, X, z)
 }
-

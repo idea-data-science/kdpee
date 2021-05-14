@@ -201,7 +201,7 @@ SEXP do_kdpee(SEXP sX, SEXP sZ) {
   double *mins = Calloc(n, double);
   double *maxs = Calloc(n, double);
   int *keys = Calloc(n, int);
-  const double **XX = Calloc(d, const double*);
+  const double **XX = Calloc(d, const double *);
   for (int col = 0; col < d; ++col) {
     XX[col] = X + col * n;
 
@@ -218,7 +218,7 @@ SEXP do_kdpee(SEXP sX, SEXP sZ) {
   }
 
   double entropy = kdpee(XX, n, d, mins, maxs, 1.96, keys);
-  
+
   /* Free work memory */
   Free(XX);
   Free(keys);
