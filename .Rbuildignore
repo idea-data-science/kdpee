@@ -1,4 +1,5 @@
 ^LICENSE\.md$
 Makefile
-.github/
+.github
 .editorconfig
+.pre-commit-config.yaml
