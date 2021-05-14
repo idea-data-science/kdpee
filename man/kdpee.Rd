@@ -2,10 +2,7 @@
 % Please edit documentation in R/kdpee.R
 \name{kdpee}
 \alias{kdpee}
-\title{D. Stowell and M. D. Plumbley
-Fast multidimensional entropy estimation by k-d partitioning.
-IEEE Signal Processing Letters 16 (6), 537--540, June 2009.
-http://dx.doi.org/10.1109/LSP.2009.2017346}
+\title{Fast entropy estimation of multi-dimensional data.}
 \usage{
 kdpee(X, z = 1.96)
 }
@@ -15,13 +12,10 @@ kdpee(X, z = 1.96)
 \item{z}{Z-score threshold}
 }
 \value{
-Entropy estimate
+Differential entropy estimate.
 }
 \description{
-D. Stowell and M. D. Plumbley
-Fast multidimensional entropy estimation by k-d partitioning.
-IEEE Signal Processing Letters 16 (6), 537--540, June 2009.
-http://dx.doi.org/10.1109/LSP.2009.2017346
+Non-parametric estimator for the differential entropy of a multidimensional distribution, given a limited set of data points, by a recursive rectilinear partitioning.
 }
 \examples{
 Xu <- matrix(runif(1000 * 100), ncol=100)
@@ -30,4 +24,10 @@ kdpee(Xu)
 Xn <- matrix(rnorm(1000 * 100), ncol=100)
 kdpee(Xn)
 
+}
+\references{
+D. Stowell and M. D. Plumbley
+Fast multidimensional entropy estimation by k-d partitioning.
+IEEE Signal Processing Letters 16 (6), 537--540, June 2009.
+http://dx.doi.org/10.1109/LSP.2009.2017346
 }
