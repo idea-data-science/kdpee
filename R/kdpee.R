@@ -8,7 +8,7 @@
 #'
 #' @return Entropy estimate
 #'
-#' @example
+#' @examples
 #' Xu <- matrix(runif(1000 * 100), ncol=100)
 #' kdpee(Xu)
 #'
