@@ -1,4 +1,4 @@
-#' Fast entropy estimation of multi-dimensional data.
+#' Fast Entropy Estimation of Multi-Dimensional Data
 #'
 #' Non-parametric estimator for the differential entropy of a multidimensional distribution, given a limited set of data points, by a recursive rectilinear partitioning.
 #'
@@ -20,7 +20,12 @@
 #' Xn <- matrix(rnorm(1000 * 100), ncol=100)
 #' kdpee(Xn)
 #'
+#' @importFrom checkmate assertMatrix
+#' @importFrom checkmate assertNumber
 #' @export
-kdpee <- function(X, z=1.96) {
+kdpee <- function(X, z = 1.96) {
+  assertMatrix(X, mode = 'numeric', min.cols = 2L, any.missing = FALSE)
+  assertNumber(z, lower = 0, finite = TRUE)
+
   .Call(do_kdpee, X, z)
 }

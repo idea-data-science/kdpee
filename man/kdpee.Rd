@@ -2,7 +2,7 @@
 % Please edit documentation in R/kdpee.R
 \name{kdpee}
 \alias{kdpee}
-\title{Fast entropy estimation of multi-dimensional data.}
+\title{Fast Entropy Estimation of Multi-Dimensional Data}
 \usage{
 kdpee(X, z = 1.96)
 }
