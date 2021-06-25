@@ -4,12 +4,21 @@
 \alias{kdpee}
 \title{Fast Entropy Estimation of Multi-Dimensional Data}
 \usage{
-kdpee(X, z = 1.96)
+kdpee(X, ci = 0.95, lower = apply(X, 2, min), upper = apply(X, 2, max))
 }
 \arguments{
-\item{X}{data}
+\item{X}{[\code{matrix}]\cr
+Data, one observation per row.}
 
-\item{z}{Z-score threshold}
+\item{ci}{[\code{numeric(1)}]\cr
+Confidence threshold used to decide if a cell should be divided further.
+Defaults to 95\%.}
+
+\item{lower}{[\code{numeric(n)}]\cr
+Lower bound of the support of \code{X}.}
+
+\item{upper}{[\code{numeric(n)}]\cr
+Upper bound of the support of \code{X}.}
 }
 \value{
 Differential entropy estimate.

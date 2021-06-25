@@ -40,6 +40,11 @@
   const R_len_t N = nrows(S);                                                  \
   const R_len_t K = ncols(S);
 
+#define UNPACK_REAL_VECTOR(S, D, N)                                            \
+  CHECK_ARG_IS_REAL_VECTOR(S);                                                 \
+  double *D = REAL(S);                                                         \
+  const R_len_t N = length(S);
+
 #define UNPACK_REAL(S, R)                                                      \
   CHECK_ARG_IS_REAL_VECTOR(S);                                                 \
   double R = REAL(S)[0];
@@ -197,29 +202,24 @@ static double kdpee(const double **dimrefs, const int n, const int d,
   return result;
 }
 
-SEXP do_kdpee(SEXP sX, SEXP sZ) {
+SEXP do_kdpee(SEXP sX, SEXP sZ, SEXP sMinX, SEXP sMaxX) {
   /* Unpack arguments */
   UNPACK_REAL_MATRIX(sX, X, n, d);
   UNPACK_REAL(sZ, z);
+  UNPACK_REAL_VECTOR(sMinX, mins, minn);
+  UNPACK_REAL_VECTOR(sMaxX, maxs, maxn);
+
+  if (minn != d)
+    error("Incorrect length for sMinX vector. Expected %i, got %i.", d, minn);
+
+  if (maxn != d)
+    error("Incorrect length for sMaxX vector. Expected %i, got %i.", d, maxn);
 
   /* Allocate work memory */
-  double *mins = Calloc(n, double);
-  double *maxs = Calloc(n, double);
   int *keys = Calloc(n, int);
   const double **XX = Calloc(d, const double *);
   for (int col = 0; col < d; ++col) {
     XX[col] = X + col * n;
-
-    /* Find the minimum and maximum for each dimension */
-    mins[col] = XX[col][0];
-    maxs[col] = XX[col][0];
-    for (int row = 1; row < n; ++row) {
-      if (XX[col][row] < mins[col]) {
-        mins[col] = XX[col][row];
-      } else if (XX[col][row] > maxs[col]) {
-        maxs[col] = XX[col][row];
-      }
-    }
   }
 
   double entropy = kdpee(XX, n, d, mins, maxs, z, keys);
@@ -227,13 +227,11 @@ SEXP do_kdpee(SEXP sX, SEXP sZ) {
   /* Free work memory */
   Free(XX);
   Free(keys);
-  Free(maxs);
-  Free(mins);
   return ScalarReal(entropy);
 }
 
 static const R_CallMethodDef callMethods[] = {
-    {"do_kdpee", (DL_FUNC)&do_kdpee, 2}, {NULL, NULL, 0}};
+    {"do_kdpee", (DL_FUNC)&do_kdpee, 4}, {NULL, NULL, 0}};
 
 void R_init_kdpee(DllInfo *info) {
   R_registerRoutines(info, NULL, callMethods, NULL, NULL);

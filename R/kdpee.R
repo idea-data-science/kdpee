@@ -2,8 +2,15 @@
 #'
 #' Non-parametric estimator for the differential entropy of a multidimensional distribution, given a limited set of data points, by a recursive rectilinear partitioning.
 #'
-#' @param X data
-#' @param z Z-score threshold
+#' @param X \[\code{matrix}\]\cr
+#'          Data, one observation per row.
+#' @param ci \[\code{numeric(1)}\]\cr
+#'          Confidence threshold used to decide if a cell should be divided further. 
+#'          Defaults to 95%.
+#' @param lower \[\code{numeric(n)}\]\cr
+#'        Lower bound of the support of \code{X}.
+#' @param upper \[\code{numeric(n)}\]\cr
+#'        Upper bound of the support of \code{X}.
 #'
 #' @return Differential entropy estimate.
 #'
@@ -22,10 +29,20 @@
 #'
 #' @importFrom checkmate assertMatrix
 #' @importFrom checkmate assertNumber
+#' @importFrom checkmate assertNumeric
+#' @importFrom stats qnorm
 #' @export
-kdpee <- function(X, z = 1.96) {
+kdpee <- function(X, ci = 0.95, lower = apply(X, 2, min), upper = apply(X, 2, max)) {
   assertMatrix(X, mode = 'numeric', min.cols = 2L, any.missing = FALSE)
-  assertNumber(z, lower = 0, finite = TRUE)
+  assertNumber(ci, lower = 0, upper = 1, finite = TRUE)
+  assertNumeric(lower, min.len = 1, max.len = ncol(X), any.missing = FALSE)
+  assertNumeric(upper, min.len = 1, max.len = ncol(X), any.missing = FALSE)
 
-  .Call(do_kdpee, X, z)
+  if (length(lower) < ncol(X))
+    lower <- rep_len(lower, ncol(X))
+  if (length(upper) < ncol(X))
+    upper <- rep_len(upper, ncol(X))
+
+  z <- abs(qnorm((1 - ci)/2))
+  .Call(do_kdpee, X, z, lower, upper)
 }
