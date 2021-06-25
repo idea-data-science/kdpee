@@ -1,6 +1,6 @@
 Package: kdpee
 Title: Fast Multidimensional Entropy Estimation by k-d Partitioning
-Version: 0.0.1
+Version: 1.0.0
 Authors@R: 
     c(person(given = "Olaf",
              family = "Mersmann",
